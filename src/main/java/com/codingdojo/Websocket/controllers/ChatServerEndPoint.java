@@ -25,22 +25,27 @@ import com.codingdojo.Websocket.models.UserMessage;
 @Component
 @ServerEndpoint(value="/chatServerEndPoint", encoders= {MessageEncoder.class}, decoders = {MessageDecoder.class})
 public class ChatServerEndPoint {
-	private Session session;
 	
 	public static Set<Session> chatroomUsers = Collections.synchronizedSet(new HashSet<Session>());
 	@OnOpen
 	public void handleOpen(Session userSession) throws IOException, EncodeException {
-		this.session = userSession;
-		System.out.println("hello");
+		System.out.println("entered handleOpen. next step: add userSession to chatroomUsers");
 		chatroomUsers.add(userSession);
+		System.out.println("added chatroomUser. next step: generate iterator");
 		Iterator<Session> iterator = chatroomUsers.iterator();
+		System.out.println("Generated iterator.");
+		System.out.println("pointers:");
+		System.out.println(userSession);
+		System.out.println(iterator);
 		while (iterator.hasNext()) iterator.next().getBasicRemote().sendObject(new UserMessage(getIds()));
 		
 	}
 	
 	@OnMessage
 	public void handleMessage(Message incomingMessage, Session userSession) throws IOException, EncodeException {
+		System.out.println("entered handleMessage");
 		if (incomingMessage instanceof ChatMessage) {
+			System.out.println("message sent: " + incomingMessage.toString());
 			ChatMessage incomingChatMessage = (ChatMessage) incomingMessage;
 			ChatMessage outgoingChatMessage = new ChatMessage();
 			String username = (String) userSession.getUserProperties().get("username");
@@ -48,7 +53,7 @@ public class ChatServerEndPoint {
 				userSession.getUserProperties().put("username", incomingChatMessage.getMessage());
 				outgoingChatMessage.setName("system");
 				outgoingChatMessage.setLocation("California , US");
-				outgoingChatMessage.setMessage("you are noew connected as "+incomingChatMessage.getMessage());
+				outgoingChatMessage.setMessage("you are now connected as "+incomingChatMessage.getMessage());
 				userSession.getBasicRemote().sendObject(outgoingChatMessage);
 			}
 			else {
@@ -83,6 +88,10 @@ public class ChatServerEndPoint {
 	@OnError
 	public void onError(Session session, Throwable throwable) {
 		System.out.println("error");
+		System.out.println(throwable.getClass().toString());
+		System.out.println(throwable.getStackTrace().toString());
+		System.out.println(throwable.getLocalizedMessage());
+		System.out.println(throwable.getMessage());
 	}
 	
 	
