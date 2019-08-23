@@ -15,6 +15,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import org.hibernate.validator.internal.util.privilegedactions.NewInstance;
 import org.springframework.stereotype.Component;
 
 import com.codingdojo.Websocket.models.ChatMessage;
@@ -29,16 +30,9 @@ public class ChatServerEndPoint {
 	public static Set<Session> chatroomUsers = Collections.synchronizedSet(new HashSet<Session>());
 	@OnOpen
 	public void handleOpen(Session userSession) throws IOException, EncodeException {
+		chatroomUsers.add(userSession);		
 		System.out.println("entered handleOpen. next step: add userSession to chatroomUsers");
-		chatroomUsers.add(userSession);
-		System.out.println("added chatroomUser. next step: generate iterator");
-		Iterator<Session> iterator = chatroomUsers.iterator();
-		System.out.println("Generated iterator.");
-		System.out.println("pointers:");
-		System.out.println(userSession);
-		System.out.println(iterator);
-		while (iterator.hasNext()) iterator.next().getBasicRemote().sendObject(new UserMessage(getIds()));
-		
+		System.out.println("number of user = " + chatroomUsers.size());
 	}
 	
 	@OnMessage

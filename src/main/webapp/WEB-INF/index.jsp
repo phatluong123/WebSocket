@@ -14,7 +14,7 @@
 <body>
 	<textarea id="messagesTextArea" readonly="readonly" rows="16" cols="60"></textarea>
 	<textarea id="usersTextArea" readonly="readonly" rows="16" cols="8"></textarea> <br>
-	<input id="locationSelect" type="text" size="65"/>
+	<input id="messagetextField" type="text" size="65"/>
 	<select id="locationSelect">
 		<option value="US">US</option>
 		<option value="Canada">Canada</option>

@@ -30,7 +30,7 @@ public class MessageDecoder implements Decoder.Text<Message>{
 		ChatMessage chatMessage = new ChatMessage();
 		JsonObject jsonObject = Json.createReader(new StringReader(jsonMessage)).readObject();
 		chatMessage.setMessage(jsonObject.getString("message"));
-		chatMessage.setMessage(jsonObject.getString("location"));
+		chatMessage.setLocation(jsonObject.getString("location"));
 		return chatMessage;
 	}
 
